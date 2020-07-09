@@ -32,18 +32,18 @@ class automa(QWidget):
 
     def initGui(self):
       icon = os.path.join(os.path.join(cmd_folder, 'logo.jpg'))
-      self.action = QAction(QIcon(icon), 'Trame automatique 2', self.iface.mainWindow())
+      self.action = QAction(QIcon(icon), 'Trame automatique hp2', self.iface.mainWindow())
       self.action.triggered.connect(self.run)
-      self.iface.addPluginToMenu('&Trame auto 2', self.action)
+      self.iface.addPluginToMenu('&Trame auto hp2', self.action)
       self.iface.addToolBarIcon(self.action)
 
     def unload(self):
       self.iface.removeToolBarIcon(self.action)
-      self.iface.removePluginMenu('Trame auto 2', self.action)  
+      self.iface.removePluginMenu('Trame auto hp2', self.action)  
       del self.action
 
     def run(self):
-        self.iface.messageBar().pushMessage("L'extension 'script auto 2' a été lancée")
+        self.iface.messageBar().pushMessage("L'extension 'script auto hp2' a été lancée")
         button.show() #shows our widgets
         button.activateWindow() ## met le widget au premier plan
       
@@ -119,7 +119,7 @@ class interface(QWidget):
             iface.messageBar().pushWarning("Erreur", "Vous n'avez pas entré de couche à utiliser")
 
 button = automa()
-#button.show()
+
 inter=interface()
 
 
@@ -140,9 +140,7 @@ def part2(file_to_join):
     change_names('X_Lambert_', 'X_L93')
     change_names('Y_Lambert_', 'Y_L93')
     fields_to_delete = ['ROWID', 'Batiment', 'Escalier', 'Adresse_su', 'nature_urg', 'Ind_col','cle_HP4', 'CODE_IRIS', 'INSEE_COM','NOM_COM', 'IRIS', "NOM_IRIS", 'TYP_IRIS', 'ANNEE']
-    delete_fields(fields_to_delete)   
-    convert_mif()
-    
+    delete_fields(fields_to_delete)       
 
         ########## CONVERTING .csv TO .shp ##########
 def convert_csv(filename_received):    
@@ -237,32 +235,6 @@ def copy_fields(field_to_copy, field_to_paste, file_to_join):
     else :
         print("La colonne '", field_to_copy,"' n'existe pas")
             
-    ## recup du nom de la couche a partir de son chemin:
-#    name_file_to_join = file_to_join.rsplit('/', 1)
-#    name_file_to_join = name_file_to_join[1]
-#    name_file_to_join = name_file_to_join.rsplit('.', 1)
-#    name_file_to_join = name_file_to_join [0]
-#    ## TODO : regler pb fichier
-#    
-#    print(name_file_to_join)
-#
-#    for lyr in QgsProject.instance().mapLayers().values():
-#        if lyr.name() == name_file_to_join:
-#            layer_chosen = lyr
-#            
-#            myfilepath = layer_chosen.dataProvider().dataSourceUri()
-#            
-#            id_field_to_copy = layer_chosen.fields().indexFromName(field_to_copy)
-#            print("id_field_to_copy : ", id_field_to_copy, ' pour : ', field_to_copy)
-#            if id_field_to_copy != -1 :
-#                print('copied ',field_to_copy, ' in ', field_to_paste)
-#                with edit(layer):
-#                    for feature in layer.getFeatures():
-#                        feature.setAttribute(feature.fieldNameIndex(field_to_paste), feature[field_to_copy])
-#                        layer.updateFeature(feature)
-#            else :
-#                print("La colonne '", field_to_copy,"' n'existe pas")
-            
 
 
         ########## SUPPRIMER COLONNES ###########
@@ -273,7 +245,6 @@ def delete_fields(fields_to_delete):
         field_to_delete = layer.fields().indexFromName(fields_to_delete[i])
 
         if field_to_delete != -1 :
-#            print('deleted : ',fields_to_delete[i])
             with edit(layer):
                 layer.dataProvider().deleteAttributes([field_to_delete]) 
         layer.updateFields()
@@ -287,14 +258,12 @@ def change_names(old_name, new_name):
     if field_index != -1:
         with edit(layer):
             layer.renameAttribute(field_index, new_name)
-#            print(old_name, 'renommé ', new_name)
             layer.updateFields
 
 
         ######### CONCAT champ2 ##########
 def concat():
     layer = iface.activeLayer()
-    print('concatenation...')
     for feature in layer.getFeatures():
         lat = str(feature['Latitude']).replace(',', '.')
         lon = str(feature['Longitude']).replace(',', '.')
@@ -302,7 +271,6 @@ def concat():
         with edit(layer):
             feature.setAttribute(feature.fieldNameIndex('champ2'), value)
             layer.updateFeature(feature)
-    print("fin concaténation")
 
 
         ######### JOINTURE SPATIALE ##########
@@ -324,22 +292,6 @@ def jointure(file_to_join):
             processing.run("qgis:joinattributesbylocation", {'INPUT':file_input, 'JOIN':file_input2, 'PREDICATE':[0], 'JOIN_FIELDS':[], 'METHOD':0, 'DISCARD_NONMATCHING':False, 'PREFIX':'', 'OUTPUT':fnout}) 
 
             iface.addVectorLayer(fnout,'','ogr')
-  
-  
-def convert_mif():
-    layer = iface.activeLayer()
-    layer_name=layer.name()
-    myfilepath = iface.activeLayer().dataProvider().dataSourceUri()
-
-    (myDirectory,nameFile) = os.path.split(myfilepath)
-
-    next_file_name = myDirectory + r"/"
-    next_file_name = next_file_name + layer_name + ".mif"
-        
-    writer = QgsVectorFileWriter.writeAsVectorFormat(layer, next_file_name, "utf-8", layer.crs(), driverName='Mapinfo File')
-    iface.messageBar().pushMessage('Le fichier a été converti en .mif')
-
-    del(writer)
 
 
 
