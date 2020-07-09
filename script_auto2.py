@@ -264,11 +264,11 @@ def change_names(old_name, new_name):
         ######### CONCAT champ2 ##########
 def concat():
     layer = iface.activeLayer()
-    for feature in layer.getFeatures():
-        lat = str(feature['Latitude']).replace(',', '.')
-        lon = str(feature['Longitude']).replace(',', '.')
-        value = 'http://maps.google.com/maps?q=&hl=fr&ie=UTF8&ll=' + lat + ',' + lon + '&layer=c&cbll=' + lat + ',' + lon + '&cbp=12,238.42,,0,0'
-        with edit(layer):
+    with edit(layer):
+        for feature in layer.getFeatures():
+            lat = str(feature['Latitude']).replace(',', '.')
+            lon = str(feature['Longitude']).replace(',', '.')
+            value = 'http://maps.google.com/maps?q=&hl=fr&ie=UTF8&ll=' + lat + ',' + lon + '&layer=c&cbll=' + lat + ',' + lon + '&cbp=12,238.42,,0,0'
             feature.setAttribute(feature.fieldNameIndex('champ2'), value)
             layer.updateFeature(feature)
 
