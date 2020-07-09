@@ -26,7 +26,7 @@ about=Demande d'abord d'ouvrir un fichier en .csv (le hp2) qu'il convertit
    <li>On renomme 'X_Lambert' en 'X_L93' et 'Y_Lambert' en 'Y_L93'</li>
    <li>Suppression des colonnes inutiles ajoutées pendant la 
    jointure</li></ol>
-version=2.0
+version=2.6
 qgisMinimumVersion=3.0
 author=Gaëlle Derambure
 email=gaelle.derambure@cdc-habitat.fr
