@@ -1,0 +1,32 @@
+[general]
+name=Script auto hp2
+description = Script automatisé à partir d'un fichier hp2 (en .csv)
+about=Demande d'abord d'ouvrir un fichier en .csv (le hp2) qu'il convertit
+   en .shp (un nom sera demandé à l'utilisateur pour ce fichier), puis :
+   <ol><li>Ajout des champs :
+   <ul><li>indic_vent (String)</li>
+   <li>champ1 (String)</li>
+   <li>champ2 (String)</li>
+   <li>champ3 (String)</li>
+   <li>ID_parcelle (String)</li>
+   <li>sim_nb_lgt (int)</li>
+   <li>sim_an_vte (Date)</li>
+   <li>sim_vte (String)</li></ul></li>
+   <li>Suppression des champs 'Nature_urg', 'ind_col', 'gcod_date', 
+   'gcod_niv', 'gcod_valid', 'id_unique'</li>
+   <li>Concaténation dans la colonne 'champ2' pour créer un lien 
+   google maps à partir de la longitude et de la latitude</li>
+   <li>Jointure spatiale avec le fichier créé auparavant et :
+   <ul><li>Une couche présente sur le projet</li> ou
+   <li>Un fichier shp présent sur l'ordinateur</li></ul>
+   ce fichier sera enregistré (une fenêtre type "enregistrer sous..."
+   s'ouvre) puis ouvert dans le projet</li>
+   <li>On copie les valeurs de la colonne 'CODE_IRIS' qu'on colle 
+   dans 'champ3'</li>
+   <li>On renomme 'X_Lambert' en 'X_L93' et 'Y_Lambert' en 'Y_L93'</li>
+   <li>Suppression des colonnes inutiles ajoutées pendant la 
+   jointure</li></ol>
+version=2.0
+qgisMinimumVersion=3.0
+author=Gaëlle Derambure
+email=gaelle.derambure@cdc-habitat.fr
